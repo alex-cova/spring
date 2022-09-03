@@ -12,11 +12,13 @@ El proyecto usa Gradle 7.5 con Kotlin DSL, es probable que tarde en descargar lo
 - Java 8 & 18
 - MySQL 8
 - IntelliJ
+- Cliente SQL
 
 Requerimientos mínimos (Omitiendo NoSQL)
 
 - Java 18
 - MySQL 8
+- Cliente SQL
 
 https://aws.amazon.com/corretto/?filtered-posts.sort-by=item.additionalFields.createdDate&filtered-posts.sort-order=desc
 
@@ -69,18 +71,17 @@ Para generar el "mappeo" de tu base de datos es necesario que especifiques las v
 
 Comandos relacionado:
 
-```
+```shell
 export DB_NAME=spring
 ```
 
-
-```
+```shell
 gradle generateJooq
 ```
 
 **Hint:**
 
-```
+```shell
 DB_NAME=spring DB_USER=root gradle generateJooq
 ```
 
@@ -199,9 +200,31 @@ Descarga el Jar: https://s3.us-west-2.amazonaws.com/dynamodb-local/dynamodb_loca
 export JAVA_HOME=path/to/java8
 ```
 
+Asegura que se aplique el cambio, debe especificar que la versión es java 8
+
 ```shell
-java -jar DynamoDBLocal.jar
+java -version
 ```
+
+Si todo esta correcto debería imprimir algo similar a esto:
+
+```shell
+penJDK Runtime Environment Corretto-8.322.06.1 (build 1.8.0_322-b06)
+OpenJDK 64-Bit Server VM Corretto-8.322.06.1 (build 25.322-b06, mixed mode)
+```
+
+```shell
+java -jar DynamoDBLocal.jar -sharedDb -dbPath ./data
+```
+
+ó
+
+```shell
+java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+```
+
+**Tip:** Para diseñar tablas, realizar operaciones o ver la información podemos utilizar el NoSQL Workbench
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.settingup.html
 
 ### Docker
 
