@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: spring
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/spring
+    username: root
+    password: tupass
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      cors:
+        allowed-origins: "*"
+        allowed-methods: "*"
