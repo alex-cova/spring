@@ -570,20 +570,44 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
 
 ### CORS
 
+```kotlin
+implementation("org.springframework.boot:spring-boot-starter-security")
+```
+
 ```java
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
-@Configuration
-@EnableWebMvc
-public class CorsConfig implements WebMvcConfigurer {
+import java.util.List;
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+@EnableWebSecurity
+public class SpringSecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
+        var cc = new CorsConfiguration();
+        cc.applyPermitDefaultValues();
+        cc.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        cc.setExposedHeaders(List.of("Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+
+        return http.authorizeRequests()
+                .anyRequest()
+                .permitAll()
+                .and()
+                .cors()
+                .configurationSource(request -> cc)
+                .and()
+                .csrf()
+                .disable()
+                .build();
+
     }
+
 }
 
 ```
